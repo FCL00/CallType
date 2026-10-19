@@ -37,6 +37,14 @@ const scenarios: AudioScenario[] = [
       "Hi there, my name is David Miller. I'm calling about my homeowners policy, number HO-77319. We had a sudden pipe burst in our upstairs bathroom yesterday morning, and there is water leaking down through the ceiling into our kitchen. I've already turned off the main water valve and hired an emergency drying crew, but I need to make sure this mitigation work is covered under our emergency repairs clause. What paperwork does the restoration contractor need to submit directly to you?"
   },
   {
+    id: 'insurance-angry-demand-male-01',
+    category: 'insurance',
+    filename: 'insurance-angry-demand-male-01.mp3',
+    voiceName: 'Puck', // Male, angry, confrontational
+    transcript:
+      "Listen to me very carefully, because I am sick and tired of being bounced around your automated system! My name is Arthur Pendelton, policy number PA-99341, claim number CL-12094. You people denied my basement water mitigation claim for twelve thousand dollars, claiming it was surface runoff rather than pipe backup! That is complete nonsense! I have paid premiums for fourteen years, and I demand you reverse this denial right now. And do not put me on hold again with someone overseas—I want to speak with a senior supervisor located here in your domestic claims office immediately!"
+  },
+  {
     id: 'ticketing-energetic-male-01',
     category: 'ticketing',
     filename: 'ticketing-energetic-male-01.mp3',
@@ -53,6 +61,14 @@ const scenarios: AudioScenario[] = [
       "Hello, this is Patricia Hayes. I'm calling because the evening show is tomorrow night at eight, and I still have not received my reserved orchestra tickets. My reservation number is EV-51870 under Patricia Hayes. I was billed three hundred and twenty dollars two weeks ago, and your automated system told me they would be delivered electronically within twenty-four hours. I really need you to reissue these tickets right now or arrange for box office will-call pickup so we don't get turned away at the door."
   },
   {
+    id: 'ticketing-discriminatory-female-01',
+    category: 'ticketing',
+    filename: 'ticketing-discriminatory-female-01.mp3',
+    voiceName: 'Aoede', // Female, entitled, impatient
+    transcript:
+      "Excuse me! I don't have time for this script you're reading. My name is Brenda Sterling, order reference TK-88102. I paid twenty-four hundred dollars for four front-row VIP gala passes for this Saturday, and I just got an email saying our seats were shifted back to general floor seating! No way, that is completely unacceptable! And honestly, I can barely understand what you are saying. I don't want an overseas call center rep—transfer me right now to a representative located in the United States who speaks native English and has the authority to restore my front-row seats!"
+  },
+  {
     id: 'ecommerce-friendly-female-01',
     category: 'ecommerce',
     filename: 'ecommerce-friendly-female-01.mp3',
@@ -67,6 +83,14 @@ const scenarios: AudioScenario[] = [
     voiceName: 'Puck', // Male, impatient, direct
     transcript:
       'Hi, listen, my name is Marcus Reid. I received order number OR-62095 earlier today, which was supposed to be a thirty-two inch gaming monitor, but the shipping box was crushed and the screen panel is completely cracked. I need to start a return and get a replacement unit expedited immediately, because I need this display for my work tomorrow. Can you email me a prepaid return shipping label and confirm that my replacement won\'t be delayed until the broken one gets back to your warehouse?'
+  },
+  {
+    id: 'ecommerce-furious-male-01',
+    category: 'ecommerce',
+    filename: 'ecommerce-furious-male-01.mp3',
+    voiceName: 'Puck', // Male, hostile, threatening
+    transcript:
+      "Are you people running a scam over there? My name is Donald Vance, order number OR-77401! I bought a designer cashmere winter coat for eighteen hundred and fifty dollars, tracking number EC-99230. Your system says it was delivered yesterday afternoon, but my security cameras show no delivery driver ever stepped on my property! Don't you dare tell me to wait five business days for a courier investigation! I want a full refund processed back to my credit card within the next ten minutes, or I am filing a fraud claim with my bank and reporting you to the attorney general!"
   }
 ];
 
@@ -74,14 +98,14 @@ async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function generateSingle(scenario: AudioScenario) {
+async function generateSingle(scenario: AudioScenario): Promise<boolean> {
   const dir = path.join(process.cwd(), 'public', 'audio', scenario.category);
   fs.mkdirSync(dir, { recursive: true });
   const finalMp3Path = path.join(dir, scenario.filename);
 
   if (fs.existsSync(finalMp3Path) && fs.statSync(finalMp3Path).size > 1000) {
     console.log(`[SKIP] ${scenario.filename} already exists (${fs.statSync(finalMp3Path).size} bytes).`);
-    return;
+    return false;
   }
 
   const tempWavPath = path.join(dir, `${scenario.id}.wav`);
@@ -92,20 +116,39 @@ async function generateSingle(scenario: AudioScenario) {
     attempts++;
     console.log(`Generating audio for ${scenario.id} with voice ${scenario.voiceName} (attempt ${attempts})...`);
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash-lite-tts',
-        contents: scenario.transcript,
-        config: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: {
-                voiceName: scenario.voiceName
+      let response;
+      try {
+        response = await ai.models.generateContent({
+          model: 'gemini-3.8-flash-tts',
+          contents: scenario.transcript,
+          config: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName: scenario.voiceName
+                }
               }
             }
           }
-        }
-      });
+        });
+      } catch (firstErr: any) {
+        console.warn(`gemini-3.8-flash-tts failed, trying gemini-3.1-flash-tts-preview:`, firstErr.message || firstErr);
+        response = await ai.models.generateContent({
+          model: 'gemini-3.1-flash-tts-preview',
+          contents: scenario.transcript,
+          config: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName: scenario.voiceName
+                }
+              }
+            }
+          }
+        });
+      }
 
       const audioPart = response.candidates?.[0]?.content?.parts?.[0];
       const base64Data = audioPart?.inlineData?.data;
@@ -128,7 +171,7 @@ async function generateSingle(scenario: AudioScenario) {
       }
 
       console.log(`Successfully generated MP3: ${finalMp3Path} (${fs.statSync(finalMp3Path).size} bytes)`);
-      return;
+      return true;
     } catch (err: any) {
       console.error(`Attempt ${attempts} failed:`, err.message || err);
       if (attempts >= maxAttempts) {
@@ -139,18 +182,19 @@ async function generateSingle(scenario: AudioScenario) {
       await sleep(waitTime);
     }
   }
+  return false;
 }
 
 async function main() {
-  console.log('Starting development audio generation for 6 scenarios...');
+  console.log('Starting audio generation for new difficult & de-escalation scenarios...');
   for (let i = 0; i < scenarios.length; i++) {
-    await generateSingle(scenarios[i]);
-    if (i < scenarios.length - 1) {
+    const generated = await generateSingle(scenarios[i]);
+    if (generated && i < scenarios.length - 1) {
       console.log('Pacing 22s between requests to respect rate limits...');
       await sleep(22000);
     }
   }
-  console.log('All audio files generated successfully!');
+  console.log('All audio generation completed!');
 }
 
 main().catch((err) => {

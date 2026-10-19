@@ -11,7 +11,7 @@ export const ACCOUNTS: Account[] = [
     iconName: 'ShieldCheck',
     color: 'emerald',
     accentBg: 'bg-emerald-500/10 text-emerald-700 border-emerald-200',
-    scenarioCount: 2
+    scenarioCount: 3
   },
   {
     id: 'ticketing',
@@ -23,7 +23,7 @@ export const ACCOUNTS: Account[] = [
     iconName: 'Ticket',
     color: 'amber',
     accentBg: 'bg-amber-500/10 text-amber-700 border-amber-200',
-    scenarioCount: 2
+    scenarioCount: 3
   },
   {
     id: 'ecommerce',
@@ -35,7 +35,7 @@ export const ACCOUNTS: Account[] = [
     iconName: 'ShoppingBag',
     color: 'blue',
     accentBg: 'bg-blue-500/10 text-blue-700 border-blue-200',
-    scenarioCount: 2
+    scenarioCount: 3
   }
 ];
 

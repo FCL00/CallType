@@ -109,7 +109,7 @@ export const LandingPage: React.FC = () => {
             </p>
             <div className="pt-2 text-xs text-stone-500 flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>3 industries & 6 prerecorded voices</span>
+              <span>3 industries & 9 prerecorded voices (including de-escalation & difficult calls)</span>
             </div>
           </div>
 

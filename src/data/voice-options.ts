@@ -28,6 +28,19 @@ export const VOICE_OPTIONS: VoiceOption[] = [
     avatarInitials: 'DM',
     avatarBg: 'bg-teal-100 text-teal-800'
   },
+  {
+    id: 'voice-insurance-angry-male',
+    name: 'Arthur Pendelton',
+    accountCategory: 'insurance',
+    gender: 'male',
+    tone: 'Angry and demanding',
+    speakingStyle: 'Confrontational, loud, and demanding immediate supervisory transfer',
+    accent: 'American English (Northeastern)',
+    description:
+      'Livid policyholder whose $12,000 basement mitigation claim was denied, threatening regulatory escalation and demanding a domestic supervisor.',
+    avatarInitials: 'AP',
+    avatarBg: 'bg-rose-100 text-rose-800'
+  },
 
   // Ticketing
   {
@@ -54,7 +67,20 @@ export const VOICE_OPTIONS: VoiceOption[] = [
     description:
       'Urgent caller missing theater orchestra passes ahead of tomorrow night curtain time, requiring immediate will-call coordination.',
     avatarInitials: 'PH',
-    avatarBg: 'bg-rose-100 text-rose-800'
+    avatarBg: 'bg-indigo-100 text-indigo-800'
+  },
+  {
+    id: 'voice-ticketing-discriminatory-female',
+    name: 'Brenda Sterling',
+    accountCategory: 'ticketing',
+    gender: 'female',
+    tone: 'Entitled, hostile, and discriminatory',
+    speakingStyle: 'Condescending, impatient, demanding native English US agent transfer',
+    accent: 'American English (Southern)',
+    description:
+      'Gala VIP purchaser furious over seat relocations, disparaging agent accent, and insisting on immediate domestic escalation.',
+    avatarInitials: 'BS',
+    avatarBg: 'bg-orange-100 text-orange-800'
   },
 
   // E-commerce
@@ -82,7 +108,20 @@ export const VOICE_OPTIONS: VoiceOption[] = [
     description:
       'Time-sensitive professional reporting crushed monitor shipment and requesting instant replacement before returning damaged goods.',
     avatarInitials: 'MR',
-    avatarBg: 'bg-indigo-100 text-indigo-800'
+    avatarBg: 'bg-teal-100 text-teal-800'
+  },
+  {
+    id: 'voice-ecommerce-furious-male',
+    name: 'Donald Vance',
+    accountCategory: 'ecommerce',
+    gender: 'male',
+    tone: 'Hostile, aggressive, and impatient',
+    speakingStyle: 'Rapid-fire, loud, demanding instant refund under threat of fraud reports',
+    accent: 'American English (Midwestern)',
+    description:
+      'Hostile luxury shopper reporting missing $1,850 designer coat delivery, refusing investigation wait times and threatening credit card fraud claims.',
+    avatarInitials: 'DV',
+    avatarBg: 'bg-red-100 text-red-800'
   }
 ];
 

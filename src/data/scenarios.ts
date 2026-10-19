@@ -247,7 +247,7 @@ export const ECOMMERCE_FIELDS: ExpectedFieldDefinition[] = [
     expectedValue: '',
     required: true,
     type: 'select',
-    options: ['Out for Delivery', 'Delivered / Damaged', 'In Transit', 'Returned to Sender'],
+    options: ['Out for Delivery', 'Delivered / Damaged', 'Disputed Delivery / Not Received', 'In Transit', 'Returned to Sender'],
     hint: 'Current shipping progress'
   },
   {
@@ -376,6 +376,44 @@ export const SCENARIOS: Scenario[] = [
     INSURANCE_FIELDS
   ),
 
+  // Insurance 3: Difficult Customer Escalation
+  createScenario(
+    {
+      id: 'insurance-angry-demand-male-01',
+      category: 'insurance',
+      voiceOptionId: 'voice-insurance-angry-male',
+      title: 'Disputed Mitigation Denial & Supervisor Demand',
+      difficulty: 'advanced',
+      durationEstimate: '~27 sec',
+      audioUrl: '/audio/insurance/insurance-angry-demand-male-01.mp3',
+      customerName: 'Arthur Pendelton',
+      scenarioSummary:
+        'An irate policyholder calls furious that his $12,000 basement mitigation claim was rejected, demanding an immediate reversal and refusing offshore hold while insisting on a domestic claims supervisor.',
+      keyDetails: [
+        'Claim Ref: CL-12094',
+        'Policy Number: PA-99341',
+        'Amount: $12,000 denied',
+        'Issue: Basement runoff vs pipe backup dispute',
+        'Demand: Domestic senior supervisor transfer'
+      ],
+      transcript:
+        'Listen to me very carefully, because I am sick and tired of being bounced around your automated system! My name is Arthur Pendelton, policy number PA-99341, claim number CL-12094. You people denied my basement water mitigation claim for twelve thousand dollars, claiming it was surface runoff rather than pipe backup! That is complete nonsense! I have paid premiums for fourteen years, and I demand you reverse this denial right now. And do not put me on hold again with someone overseas—I want to speak with a senior supervisor located here in your domestic claims office immediately!',
+      expectedForm: {
+        customerName: 'Arthur Pendelton',
+        policyNumber: 'PA-99341',
+        claimReferenceNumber: 'CL-12094',
+        insuranceType: 'Homeowners Insurance',
+        dateOfIncident: 'Recent basement water damage',
+        reasonForCalling: 'Dispute denied basement water mitigation claim and demand supervisor',
+        customerConcern: 'Basement water mitigation claim for twelve thousand dollars denied as surface runoff instead of pipe backup',
+        actionRequired: 'De-escalate caller, review denial rationale, and transfer to domestic senior claims supervisor',
+        callSummary: 'Arthur Pendelton disputing $12,000 denial; paid premiums for 14 years; refuses offshore hold and demands US supervisor',
+        additionalNotes: 'Highly confrontational; requires domestic supervisor escalation; dispute over runoff vs pipe backup'
+      }
+    },
+    INSURANCE_FIELDS
+  ),
+
   // Ticketing 1
   createScenario(
     {
@@ -452,6 +490,46 @@ export const SCENARIOS: Scenario[] = [
     TICKETING_FIELDS
   ),
 
+  // Ticketing 3: Difficult / Discriminatory Customer Escalation
+  createScenario(
+    {
+      id: 'ticketing-discriminatory-female-01',
+      category: 'ticketing',
+      voiceOptionId: 'voice-ticketing-discriminatory-female',
+      title: 'VIP Gala Reassignment & Agent Escalation',
+      difficulty: 'advanced',
+      durationEstimate: '~33 sec',
+      audioUrl: '/audio/ticketing/ticketing-discriminatory-female-01.mp3',
+      customerName: 'Brenda Sterling',
+      scenarioSummary:
+        'An enraged gala VIP purchaser calls furious after paying $2,400 for four front-row seats only to be relocated to general floor, disparaging the agent and demanding an immediate transfer to a native English speaking US supervisor.',
+      keyDetails: [
+        'Order Ref: TK-88102',
+        'Customer: Brenda Sterling',
+        'Event: Saturday VIP Gala',
+        'Seats: 4 Front-Row VIP ($2,400)',
+        'Issue: Reassigned to general floor seating',
+        'Demand: Domestic native English supervisor transfer'
+      ],
+      transcript:
+        "Excuse me! I don't have time for this script you're reading. My name is Brenda Sterling, order reference TK-88102. I paid twenty-four hundred dollars for four front-row VIP gala passes for this Saturday, and I just got an email saying our seats were shifted back to general floor seating! No way, that is completely unacceptable! And honestly, I can barely understand what you are saying. I don't want an overseas call center rep—transfer me right now to a representative located in the United States who speaks native English and has the authority to restore my front-row seats!",
+      expectedForm: {
+        customerName: 'Brenda Sterling',
+        orderReferenceNumber: 'TK-88102',
+        eventName: 'VIP Gala Passes / Saturday Gala',
+        eventDate: 'This Saturday',
+        numberOfTickets: '4',
+        seatingSection: 'Front-Row VIP (reassigned to general floor)',
+        paymentStatus: 'Paid / Confirmed',
+        reasonForCalling: 'Dispute relocation from front-row VIP gala seats to general floor',
+        issueReported: 'Paid $2,400 for 4 VIP front-row passes; email notified seats were moved to general floor seating',
+        resolutionRequired: 'De-escalate caller, restore front-row VIP passes, or escalate to supervisor with seat allocation authority',
+        additionalNotes: 'Caller extremely hostile; demanded transfer away from overseas agent to domestic native English supervisor'
+      }
+    },
+    TICKETING_FIELDS
+  ),
+
   // E-commerce 1
   createScenario(
     {
@@ -521,6 +599,45 @@ export const SCENARIOS: Scenario[] = [
         customerConcern: 'Shipping box was crushed and screen panel is cracked; customer urgently needs display for work tomorrow',
         requestedResolution: 'Email prepaid return shipping label and expedite replacement immediately without waiting for return to warehouse',
         additionalNotes: 'Customer needs display for work tomorrow; replacement must be expedited without return warehouse delay'
+      }
+    },
+    ECOMMERCE_FIELDS
+  ),
+
+  // E-commerce 3: Difficult Customer Hostility & Fraud Threat
+  createScenario(
+    {
+      id: 'ecommerce-furious-male-01',
+      category: 'ecommerce',
+      voiceOptionId: 'voice-ecommerce-furious-male',
+      title: 'Missing Luxury Coat Delivery & Fraud Threat',
+      difficulty: 'advanced',
+      durationEstimate: '~34 sec',
+      audioUrl: '/audio/ecommerce/ecommerce-furious-male-01.mp3',
+      customerName: 'Donald Vance',
+      scenarioSummary:
+        'A hostile customer claims an $1,850 designer cashmere coat marked as delivered never arrived, refusing standard courier investigation times and demanding an immediate refund within ten minutes under threat of filing bank fraud and attorney general complaints.',
+      keyDetails: [
+        'Order Number: OR-77401',
+        'Tracking Number: EC-99230',
+        'Item: Designer Cashmere Winter Coat',
+        'Amount: $1,850 charged',
+        'Issue: Marked delivered yesterday but security cameras show no delivery',
+        'Threat: Bank fraud claim & attorney general report'
+      ],
+      transcript:
+        'Are you people running a scam over there? My name is Donald Vance, order number OR-77401! I bought a designer cashmere winter coat for eighteen hundred and fifty dollars, tracking number EC-99230. Your system says it was delivered yesterday afternoon, but my security cameras show no delivery driver ever stepped on my property! Don\'t you dare tell me to wait five business days for a courier investigation! I want a full refund processed back to my credit card within the next ten minutes, or I am filing a fraud claim with my bank and reporting you to the attorney general!',
+      expectedForm: {
+        customerName: 'Donald Vance',
+        orderNumber: 'OR-77401',
+        productName: 'Designer Cashmere Winter Coat',
+        purchaseDate: 'Yesterday afternoon delivery',
+        trackingNumber: 'EC-99230',
+        deliveryStatus: 'Disputed Delivery / Not Received',
+        reasonForCalling: 'Dispute missing $1,850 designer coat marked delivered by courier',
+        customerConcern: 'Package marked delivered yesterday but security camera shows driver never stepped on property; refuses 5-day wait',
+        requestedResolution: 'Full refund of $1,850 processed to credit card within ten minutes',
+        additionalNotes: 'Hostile and accusatory; threatened bank fraud claim and attorney general complaint'
       }
     },
     ECOMMERCE_FIELDS
