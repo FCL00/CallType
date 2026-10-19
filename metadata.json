@@ -1,0 +1,6 @@
+{
+  "name": "CallType",
+  "description": "Customer Support Listening & Typing Simulator - Practice real-world customer support conversations, improve typing accuracy, and build confidence handling calls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
